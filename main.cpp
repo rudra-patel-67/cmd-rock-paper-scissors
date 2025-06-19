@@ -1,7 +1,10 @@
 #include <iostream>
-#include <conio.h>
+#include <termios.h>
+#include <unistd.h>
 #include <time.h>
 using namespace std;
+
+char getch();
 
 //rock=1; paper=2; scissors=3;      --- For A.I.
 
@@ -64,7 +67,7 @@ class rps
                 }
                 cout<<"Enter input 'e' to exit the game!"<<endl<<endl;  
                 cout<<"Player 1: Choose your weapon (Rock/Paper/Scissor): ";
-                choice=getch();
+                cin>>choice;
                 cin.ignore();
                 if(choice=='e' || choice=='E')
                 {
@@ -80,7 +83,7 @@ class rps
                 }
                 srand(time(0)); 
                 ai = (rand() % (2)) + 1;
-                system("cls");
+                system("clear");
                 cout<<"Your choice ->\t  "<<choice<<"  |  "<<weapon[ai-1]<<"   <- AI's choice"<<endl<<endl;
                 
                 if(((choice=='r' || choice=='R') && ai==1) || ((choice=='p' || choice=='P') && ai==2) || ((choice=='s' || choice=='S') && ai==3))
@@ -143,7 +146,7 @@ class rps
                     goto p1turn;
                     continue;
                 }
-                system("cls");
+                system("clear");
                 p2turn:
                 cout<<"Player 2: Choose your weapon (Rock/Paper/Scissor): ";
                 cin>>p2choice;
@@ -162,7 +165,7 @@ class rps
                     goto p2turn;
                     continue;
                 }
-                system("cls");
+                system("clear");
                 cout<<"Player 1's choice ->\t  "<<p1choice<<"  |  "<<p2choice<<"   <- Player 2's choice"<<endl<<endl;
                 
                 if(p1choice==p2choice)
@@ -199,7 +202,7 @@ class rps
             cout<<"4. First to _____ Wins "<<endl;
             cout<<"5. Exit "<<endl;
             cin>>choice;
-            system("cls");
+            system("clear");
             switch (choice)
             {
             case 1:
@@ -238,10 +241,31 @@ int main()
 {
     class rps game;
     char a;
-    system("cls");
+    system("clear");
     cout << "XX--------------------->\tRock \t Paper \t Scissor \t<----------------------XX"<<endl<<endl;
     cout<<"\t\t\t     Press any key to start the game"<<endl<<endl;
     getch();
     game.startGame();
     return 0;
+}
+
+
+
+
+
+
+
+// Linux-compatible getch()
+char getch() {
+    termios oldt, newt;
+    char ch;
+    tcgetattr(STDIN_FILENO, &oldt);          // Get current terminal settings
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);        // Disable buffering and echo
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Apply new settings
+
+    ch = getchar();                          // Read single character
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore old settings
+    return ch;
 }
