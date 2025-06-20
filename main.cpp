@@ -6,6 +6,7 @@ using namespace std;
 
 char getch();
 
+void clearScreen();
 //rock=1; paper=2; scissors=3;      --- For A.I.
 
 class rps
@@ -83,7 +84,7 @@ class rps
                 }
                 srand(time(0)); 
                 ai = (rand() % (2)) + 1;
-                system("clear");
+                clearScreen();
                 cout<<"Your choice ->\t  "<<choice<<"  |  "<<weapon[ai-1]<<"   <- AI's choice"<<endl<<endl;
                 
                 if(((choice=='r' || choice=='R') && ai==1) || ((choice=='p' || choice=='P') && ai==2) || ((choice=='s' || choice=='S') && ai==3))
@@ -146,7 +147,7 @@ class rps
                     goto p1turn;
                     continue;
                 }
-                system("clear");
+                clearScreen();
                 p2turn:
                 cout<<"Player 2: Choose your weapon (Rock/Paper/Scissor): ";
                 cin>>p2choice;
@@ -165,7 +166,7 @@ class rps
                     goto p2turn;
                     continue;
                 }
-                system("clear");
+                clearScreen();
                 cout<<"Player 1's choice ->\t  "<<p1choice<<"  |  "<<p2choice<<"   <- Player 2's choice"<<endl<<endl;
                 
                 if(p1choice==p2choice)
@@ -202,7 +203,7 @@ class rps
             cout<<"4. First to _____ Wins "<<endl;
             cout<<"5. Exit "<<endl;
             cin>>choice;
-            system("clear");
+            clearScreen();
             switch (choice)
             {
             case 1:
@@ -241,7 +242,7 @@ int main()
 {
     class rps game;
     char a;
-    system("clear");
+    clearScreen();
     cout << "XX--------------------->\tRock \t Paper \t Scissor \t<----------------------XX"<<endl<<endl;
     cout<<"\t\t\t     Press any key to start the game"<<endl<<endl;
     getch();
@@ -268,4 +269,12 @@ char getch() {
 
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore old settings
     return ch;
+}
+
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");    // Windows
+#else
+    system("clear");  // Linux/macOS
+#endif
 }
